@@ -10,6 +10,7 @@ import {
   ListFilter,
   ShieldCheck
 } from "lucide-react";
+import { SignOutButton } from "@clerk/nextjs";
 import {
   ANNOTATION_CLASSIFICATIONS,
   ARTICLE_SCORES,
@@ -434,6 +435,17 @@ export default function Home() {
           <a className="buttonLink" href="/sign-in">
             Account
           </a>
+          {hasTestRole ? (
+            <button className="secondary" type="button" onClick={() => setIsAuthenticated(false)}>
+              Logout
+            </button>
+          ) : (
+            <SignOutButton redirectUrl="/">
+              <button className="secondary" type="button">
+                Logout
+              </button>
+            </SignOutButton>
+          )}
         </div>
       </header>
 
