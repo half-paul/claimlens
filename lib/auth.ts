@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export const ROLES = ["visitor", "reviewer", "admin"] as const;
@@ -22,6 +22,12 @@ export async function getRequestRole(request: Request): Promise<AppRole> {
   const session = await auth();
   const metadata = session.sessionClaims?.publicMetadata as { role?: unknown } | undefined;
   const role = metadata?.role;
+  if (isRole(role)) return role;
+
+  const user = session.userId ? await currentUser() : null;
+  const userRole = user?.publicMetadata?.role;
+  if (isRole(userRole)) return userRole;
+
   return isRole(role) ? role : "visitor";
 }
 
